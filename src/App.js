@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
+import { fetchWeather } from './Api/fetchWeather'
+// import './App.css';
+
+const App = () => {
+  const [query,setQuery] = useState('');
+  const [weather,setWeather] = useState('');
+
+  const search = async (e) => {
+    if(e.key === 'Enter'){
+      const data = await fetchWeather(query);
+      setWeather(data)
+      setQuery('')
+      console.log(data[0].nama)
+    }
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='main-container'>
+      <p>Anda mengetik = {query}</p>
+
+      <input
+        type="text"
+        className="search"
+        placeholder="Search ..."
+        value={query}
+        onChange={(e)=>setQuery(e.target.value)}
+        onKeyPress={search}
+      />
+
+    {weather[0] && (
+        <div>
+          <h2>{weather[0].nama }</h2>
+        </div>
+      )}
     </div>
   );
 }
-
 export default App;
+// <p>enter {weather[0].nama}</p>
